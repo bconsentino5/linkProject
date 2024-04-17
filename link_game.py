@@ -30,10 +30,14 @@ game_state = 'start_menu'
 
 def draw_start_menu():
     # Load the PNG image
+    # Load the PNG image
     image = pygame.image.load('Flower.png')
     image = pygame.transform.scale(image, (200, 200))
-    image_rect = image.get_rect()
-    image_rect.topleft = (200, 200) #where the flower goes
+    
+    # Create rects for each instance of the image and set their positions
+    image_rect1 = image.get_rect(topleft=(200, 200))
+    image_rect2 = image.get_rect(topleft=(500, 300))
+    image_rect3 = image.get_rect(topleft=(700, 400))
      
     # 
     windowSurface.fill(WHITE)
@@ -41,7 +45,9 @@ def draw_start_menu():
     prompt = font.render('Press SPACE to continue', True, PURPLE)
     windowSurface.blit(title, (WINDOW_WIDTH/2 - title.get_width()/2, WINDOW_HEIGHT/2 - title.get_height()/2))
     windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + title.get_height()))
-    windowSurface.blit(image, image_rect)
+    windowSurface.blit(image, image_rect1)
+    windowSurface.blit(image, image_rect2)
+    windowSurface.blit(image, image_rect3)
     pygame.display.update()
 
 def start_game():
