@@ -14,10 +14,12 @@ pygame.display.set_caption("Link")
 
 # colors
 WHITE = (255, 255, 255)
+BLACK = (0,0,0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 PINK = (250, 195, 226)
 PURPLE = (202, 102, 242)
+purplegray = (25, 24, 26)
 
 # set up title of page
 font = pygame.font.SysFont('ariel', 100)
@@ -29,30 +31,32 @@ textRect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 900)
 game_state = 'start_menu'
 
 def draw_start_menu():
+    windowSurface.fill(purplegray) 
     # Load the PNG image
-    # Load the PNG image
-    image = pygame.image.load('Flower.png')
-    image = pygame.transform.scale(image, (200, 200))
-    
-    # Create rects for each instance of the image and set their positions
-    image_rect1 = image.get_rect(topleft=(200, 200))
-    image_rect2 = image.get_rect(topleft=(500, 300))
-    image_rect3 = image.get_rect(topleft=(700, 400))
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (800, 400)) #size of image
+
+    # Location of image
+    logo_rect = logo.get_rect(topleft=(100, 100))
      
-    # 
-    windowSurface.fill(WHITE)
-    title = font.render('Link', True, PINK)
+     #shows stuff on screen
     prompt = font.render('Press SPACE to continue', True, PURPLE)
-    windowSurface.blit(title, (WINDOW_WIDTH/2 - title.get_width()/2, WINDOW_HEIGHT/2 - title.get_height()/2))
-    windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + title.get_height()))
-    windowSurface.blit(image, image_rect1)
-    windowSurface.blit(image, image_rect2)
-    windowSurface.blit(image, image_rect3)
+    windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + prompt.get_height()))
+    windowSurface.blit(logo, logo_rect) 
     pygame.display.update()
 
 def start_game():
     global game_state
     game_state = "game"
+
+def game():
+    windowSurface.fill(BLACK)
+    # Draw rectangle
+    pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
+    # Draw text
+    windowSurface.blit(text, textRect)
+    pygame.display.update()
+    
 
 
 # Main game loop
@@ -70,11 +74,5 @@ while True:
             start_game()
 
     elif game_state == "game":
-        # Your game logic goes here
-        windowSurface.fill(WHITE)
-        # Draw rectangle
-        pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
-        # Draw text
-        windowSurface.blit(text, textRect)
-        pygame.display.update()
+        game()
         mainClock.tick(40)
