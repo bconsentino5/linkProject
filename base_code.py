@@ -3,7 +3,21 @@ levels = {'1': ['mom', 'dad', 'parents'],
           '3': ['heel', 'bark', 'dog'],
           '4': ['tree', 'glue', 'stick'],
           '5': ['theme', 'swing', 'park'],
-          '6': ['football', 'smartphone', 'screen']}
+          '6': ['football', 'smartphone', 'screen'],
+          '7': ['computer', 'door', 'key'],
+          '8': ['technology', 'fruit', 'apple'],
+          '9': ['trust', 'religion', 'faith'],
+          '10': ['animal', 'pooper', 'party'],
+          '11': ['wind', 'string', 'instrument'],
+          '12': ['bowtie', 'wheel', 'pasta'],
+          '12': ['dog', 'chair', 'sit'],
+          '14': ['pumpkin', 'slipper', 'cinderella'],
+          '15': ['cheese', 'color', 'wheel'],
+          '16': ['shoe', 'spirit', 'soul'],
+          '17': ['leap', 'amphibian', 'frog'],
+          '18': ['slice', 'italy', 'pizza'],
+          '19': ['heart', 'music', 'beat'],
+          '20': ['dairy', 'nut', 'butter']}
 
 curr_level = 1
 
