@@ -29,11 +29,19 @@ textRect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 900)
 game_state = 'start_menu'
 
 def draw_start_menu():
+    # Load the PNG image
+    image = pygame.image.load('Flower.png')
+    image = pygame.transform.scale(image, (200, 200))
+    image_rect = image.get_rect()
+    image_rect.topleft = (200, 200) #where the flower goes
+     
+    # 
     windowSurface.fill(WHITE)
     title = font.render('Link', True, PINK)
     prompt = font.render('Press SPACE to continue', True, PURPLE)
     windowSurface.blit(title, (WINDOW_WIDTH/2 - title.get_width()/2, WINDOW_HEIGHT/2 - title.get_height()/2))
     windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + title.get_height()))
+    windowSurface.blit(image, image_rect)
     pygame.display.update()
 
 def start_game():
