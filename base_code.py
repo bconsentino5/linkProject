@@ -11,13 +11,13 @@ levels = {'1': ['mom', 'dad', 'parents'],
           '11': ['wind', 'string', 'instrument'],
           '12': ['bowtie', 'wheel', 'pasta'],
           '12': ['dog', 'chair', 'sit'],
-          '14': [],
-          '15': [],
-          '16': [],
-          '17': [],
-          '18': [],
-          '19': [],
-          '20': []}
+          '14': ['pumpkin', 'slipper', 'cinderella'],
+          '15': ['cheese', 'color', 'wheel'],
+          '16': ['shoe', 'spirit', 'soul'],
+          '17': ['leap', 'amphibian', 'frog'],
+          '18': ['slice', 'italy', 'pizza'],
+          '19': ['heart', 'music', 'beat'],
+          '20': ['dairy', 'nut', 'butter']}
 
 curr_level = 1
 
