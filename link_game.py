@@ -19,7 +19,7 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 PINK = (250, 195, 226)
 PURPLE = (202, 102, 242)
-purplegray = (25, 24, 26)
+GRAY = (28, 28, 28)
 
 # set up title of page
 font = pygame.font.SysFont('ariel', 100)
@@ -31,18 +31,21 @@ textRect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 900)
 game_state = 'start_menu'
 
 def draw_start_menu():
-    windowSurface.fill(purplegray) 
+    windowSurface.fill(BLACK) 
+
     # Load the PNG image
     logo = pygame.image.load('LINK_logo.png')
     logo = pygame.transform.scale(logo, (800, 400)) #size of image
+    play = pygame.image.load('pressSPACE.png')
+    play = pygame.transform.scale(play, (800, 400)) #size of image
 
     # Location of image
     logo_rect = logo.get_rect(topleft=(100, 100))
-     
+    play_rect = play.get_rect(topleft=(100, 500))
+
      #shows stuff on screen
-    prompt = font.render('Press SPACE to continue', True, PURPLE)
-    windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + prompt.get_height()))
     windowSurface.blit(logo, logo_rect) 
+    windowSurface.blit(play, play_rect) 
     pygame.display.update()
 
 def start_game():
