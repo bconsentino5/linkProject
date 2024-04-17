@@ -1,99 +1,134 @@
-import pygame, sys, time, random
-from pygame.locals import *
+# import pygame
+# import sys
+# from pygame.locals import *
 
-# set up pygame
+# # Set up pygame
+# pygame.init()
+# mainClock = pygame.time.Clock()
+
+# # Set up window
+# WINDOW_WIDTH = 1000
+# WINDOW_HEIGHT = 1000
+# windowSurface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
+# pygame.display.set_caption("Link")
+
+# # colors
+# WHITE = (255, 255, 255)
+# GREEN = (0, 255, 0)
+# BLUE = (0, 0, 255)
+# PINK = (250, 195, 226)
+# PURPLE = (202, 102, 242)
+
+# # set up title of page
+# font = pygame.font.SysFont('ariel', 100)
+# text = font.render('Link', True, PURPLE, GREEN)
+# textRect = text.get_rect()
+# textRect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 900)
+
+# #start menu stuff
+# game_state = 'start_menu'
+
+# def draw_start_menu():
+#     windowSurface.fill(WHITE)
+#     title = font.render('Link', True, PINK)
+#     prompt = font.render('Press SPACE to continue', True, PURPLE)
+#     windowSurface.blit(title, (WINDOW_WIDTH/2 - title.get_width()/2, WINDOW_HEIGHT/2 - title.get_height()/2))
+#     windowSurface.blit(prompt, (WINDOW_WIDTH/2 - prompt.get_width()/2, WINDOW_HEIGHT/2 + title.get_height()))
+#     pygame.display.update()
+
+# def start_game():
+#     global game_state
+#     game_state = "game"
+
+
+# # Main game loop
+# while True:
+#     # Check for quit
+#     for event in pygame.event.get():
+#         if event.type == QUIT:
+#             pygame.quit()
+#             sys.exit()
+
+#     if game_state == "start_menu":
+#         draw_start_menu()
+#         keys = pygame.key.get_pressed()
+#         if keys[pygame.K_SPACE]:
+#             start_game()
+
+#     elif game_state == "game":
+#         # Your game logic goes here
+#         windowSurface.fill(WHITE)
+#         # Draw rectangle
+#         pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
+#         # Draw text
+#         windowSurface.blit(text, textRect)
+#         pygame.display.update()
+#         mainClock.tick(40)
+
+
+import pygame
+import sys
+
+# Initialize Pygame
 pygame.init()
 
-# set up window
-WINDOWWIDTH = 1000
-WINDOWHEIGHT = 500
-windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
-pygame.display.set_caption('Animation')
+# Set up the screen
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Word Rectangles")
 
-MOVESPEED = 4
-
-DOWNLEFT = 'downleft'
-DOWNRIGHT = 'downright'
-UPLEFT = 'upleft'
-UPRIGHT = 'upright'
-
-DIRLIST = [DOWNLEFT, DOWNRIGHT, UPLEFT, UPRIGHT]
-
+# Set up colors
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-
-COLORLIST = [RED, GREEN, BLUE]
-
-# set up the box data structure
-# b1 = {'rect': pygame.Rect(300, 80, 50, 100), 'color': RED, 'dir': UPRIGHT}
-# b2 = {'rect': pygame.Rect(200, 20, 20, 20), 'color': GREEN, 'dir': UPLEFT}
-# b3 = {'rect': pygame.Rect(100, 150, 60, 60), 'color': BLUE, 'dir': DOWNLEFT}
-
-number = 25
-boxes = []
-
-for i in range(number):
-    # random.randint(#, #)
-    color = COLORLIST[random.randint(0, 2)]
-    direction = DIRLIST[random.randint(0, 3)]
-    top = random.randint(1, WINDOWHEIGHT - 200)
-    left = random.randint(1, WINDOWWIDTH - 200)
-    width = random.randint(1, 200)
-    height = random.randint(1, 200)
-
-    box = {'rect': pygame.Rect(top, left, width, height), 'color': color, 'dir': direction}
-
-    boxes.append(box)
+PINK = (250, 195, 226)
+PURPLE = (202, 102, 242)
+BLACK = (0, 0, 0)
 
 
+# Set up fonts
+font = pygame.font.Font(None, 48)
 
-while True:
-    # check for a QUIT event
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+def draw_word_with_rectangle(word, x, y):
+    text_surface = font.render(word, True, BLACK)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (x, y)
+    pygame.draw.rect(screen, PURPLE, (text_rect.topleft, (text_rect.width +10, text_rect.height+10)))
+    screen.blit(text_surface, text_rect)
 
-    windowSurface.fill(WHITE)
+# Main loop
+def main():
+    word1 = "happapapapa"
+    word2 = "World"
+    
+    # Calculate the positions for the words
+    word1_width = font.size(word1)[0]
+    word2_width = font.size(word2)[0]
+    total_width = word1_width + word2_width
+    margin = 20
+    x_start = (((screen_width) // 2) - margin) - word1_width
+    
+    word_y = (screen_height - font.get_height()) // 2
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    # for b in boxes:
-    #     if b['dir'] == DOWNLEFT:
-    #         b['rect'].left -= MOVESPEED
-    #         b['rect'].top += MOVESPEED
-    #     if b['dir'] == DOWNRIGHT:
-    #         b['rect'].left += MOVESPEED
-    #         b['rect'].top += MOVESPEED
-    #     if b['dir'] == UPLEFT:
-    #         b['rect'].left -= MOVESPEED
-    #         b['rect'].top -= MOVESPEED
-    #     if b['dir'] == UPRIGHT:
-    #         b['rect'].left += MOVESPEED
-    #         b['rect'].top -= MOVESPEED
+        screen.fill(WHITE)
         
-    #     if b['rect'].top < 0:
-    #         if b['dir'] == UPLEFT:
-    #             b['dir'] = DOWNLEFT
-    #         if b['dir'] == UPRIGHT:
-    #             b['dir'] = DOWNRIGHT
-    #     if b['rect'].bottom > WINDOWHEIGHT:
-    #         if b['dir'] == DOWNLEFT:
-    #             b['dir'] = UPLEFT
-    #         if b['dir'] == DOWNRIGHT:
-    #             b['dir'] = UPRIGHT
-    #     if b['rect'].left < 0:
-    #         if b['dir'] == DOWNLEFT:
-    #             b['dir'] = DOWNRIGHT
-    #         if b['dir'] == UPLEFT:
-    #             b['dir'] = UPRIGHT
-    #     if b['rect'].right > WINDOWWIDTH:
-    #         if b['dir'] == DOWNRIGHT:
-    #             b['dir'] = DOWNLEFT
-    #         if b['dir'] == UPRIGHT:
-    #             b['dir'] = UPLEFT
+        # Draw word1 and its rectangle
+        draw_word_with_rectangle(word1, x_start, word_y)
+        
+        # Draw word2 and its rectangle
+        draw_word_with_rectangle(word2, x_start + word1_width + margin, word_y)
 
-    #     pygame.draw.rect(windowSurface, b['color'], b['rect'])
-    pygame.Rect(left, top, width, height)    
-    pygame.display.update()
-    time.sleep(.02)
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+if __name__ == "__main__":
+    main()
