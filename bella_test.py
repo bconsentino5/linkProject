@@ -94,8 +94,12 @@ def draw_word_with_rectangle(word, x, y):
     text_surface = font.render(word, True, BLACK)
     text_rect = text_surface.get_rect()
     text_rect.topleft = (x, y)
-    pygame.draw.rect(screen, PURPLE, (text_rect.topleft, (text_rect.width +10, text_rect.height+10)))
-    screen.blit(text_surface, text_rect)
+    new_rect = pygame.Rect(x - 5, y - 5, text_rect.width + 10, text_rect.height + 10)
+    pygame.draw.rect(screen, PURPLE, (new_rect.topleft, (new_rect.width, new_rect.height)), border_radius = 3)
+    pygame.draw.rect(screen, WHITE, (text_rect.topleft, (text_rect.width, text_rect.height)), border_radius = 3)
+    screen.blit(text_surface, new_rect)
+    # screen.blit(text_surface, text_rect)
+
 
 # Main loop
 def main():
@@ -107,7 +111,8 @@ def main():
     word2_width = font.size(word2)[0]
     total_width = word1_width + word2_width
     margin = 20
-    x_start = (((screen_width) // 2) - margin) - word1_width
+    x_start = (((screen_width - total_width) // 2) - margin)
+    # x_start = (((screen_width) // 2) - margin) - word1_width
     
     word_y = (screen_height - font.get_height()) // 2
     
