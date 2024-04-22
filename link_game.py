@@ -39,7 +39,7 @@ def draw_start_menu():
     logo_rect = logo.get_rect(topleft=(100, 100))
     play_rect = play.get_rect(topleft=(100, 500))
 
-     #shows stuff on screen
+    #shows stuff on screen
     windowSurface.blit(logo, logo_rect) 
     windowSurface.blit(play, play_rect) 
     pygame.display.update()
@@ -51,16 +51,16 @@ def start_game():
 
 def game():
 
-    windowSurface.fill(BLACK)
+    windowSurface.fill(BLACK) #makes screen black
     
     # Draw rectangle
-    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
-    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700)) #big rectangle
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600)) #small rectangle
 
-    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.image.load('LINK_logo.png') #import image
     logo = pygame.transform.scale(logo, (400, 200)) #size of image
-    logo_rect = logo.get_rect(topleft=(300, 50))
-    windowSurface.blit(logo, logo_rect) 
+    logo_rect = logo.get_rect(topleft=(300, 50)) #postition of image
+    windowSurface.blit(logo, logo_rect) #puts image on screen
     
 
     pygame.display.update()
