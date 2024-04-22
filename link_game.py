@@ -18,14 +18,10 @@ BLACK = (0,0,0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 PINK = (250, 195, 226)
-PURPLE = (202, 102, 242)
+PURPLE = (151, 7, 250)
+DARKPURPLE = (90, 3, 149)
 GRAY = (28, 28, 28)
 
-# set up title of page
-font = pygame.font.SysFont('ariel', 100)
-text = font.render('Link', True, PURPLE)
-textRect = text.get_rect()
-textRect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 900)
 
 #start menu stuff
 game_state = 'start_menu'
@@ -48,22 +44,25 @@ def draw_start_menu():
     windowSurface.blit(play, play_rect) 
     pygame.display.update()
 
+#main game page
 def start_game():
     global game_state
     game_state = "game"
 
 def game():
+
     windowSurface.fill(BLACK)
+    
     # Draw rectangle
-    #pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
-    # Draw text
-    #windowSurface.blit(text, textRect)
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
 
     logo = pygame.image.load('LINK_logo.png')
-    logo = pygame.transform.scale(logo, (800, 400)) #size of image
-    logo_rect = logo.get_rect(topleft=(100, 100))
+    logo = pygame.transform.scale(logo, (400, 200)) #size of image
+    logo_rect = logo.get_rect(topleft=(300, 50))
     windowSurface.blit(logo, logo_rect) 
     
+
     pygame.display.update()
 
 # Main game loop
@@ -74,12 +73,12 @@ while True:
             pygame.quit()
             sys.exit()
 
-    if game_state == "start_menu":
+    if game_state == "start_menu": #if game is in the start menu
         draw_start_menu()
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE]: #if space bar pressed it will take you to game
             start_game()
 
-    elif game_state == "game":
+    elif game_state == "game": #if game is in the game
         game()
         mainClock.tick(40)
