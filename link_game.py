@@ -55,12 +55,16 @@ def start_game():
 def game():
     windowSurface.fill(BLACK)
     # Draw rectangle
-    pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
+    #pygame.draw.rect(windowSurface, PINK, pygame.Rect(400, 50, 200, 100))
     # Draw text
-    windowSurface.blit(text, textRect)
-    pygame.display.update()
-    
+    #windowSurface.blit(text, textRect)
 
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (800, 400)) #size of image
+    logo_rect = logo.get_rect(topleft=(100, 100))
+    windowSurface.blit(logo, logo_rect) 
+    
+    pygame.display.update()
 
 # Main game loop
 while True:
