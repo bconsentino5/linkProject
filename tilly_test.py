@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
+from combo import Link
 
 # Set up pygame
 pygame.init()
@@ -28,9 +29,11 @@ game_state = 'start_menu'
 # Initialize input_text
 input_text = ""
 
-# Words for the game
-word1 = "apple"
-word2 = "pie"
+ans_display = ""
+
+link = Link()
+words = link.get_words()
+
 
 def draw_start_menu():
     windowSurface.fill(BLACK)
@@ -62,9 +65,12 @@ def start_game():
     game_state = "game"
     global input_text
     input_text = ""
+    
 
 def game():
     global input_text  # Declare input_text as global
+    global words
+    global ans_display
 
     windowSurface.fill(BLACK)
 
@@ -83,12 +89,13 @@ def game():
     pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
 
     # Display the two words to the player
+    
     font = pygame.font.SysFont(None, 36)
-    text_surface = font.render("Word 1: " + word1, True, WHITE)
+    text_surface = font.render("Word 1: " + words[0], True, WHITE)
     text_rect = text_surface.get_rect(topleft=(200, 300))
     windowSurface.blit(text_surface, text_rect)
 
-    text_surface2 = font.render("Word 2: " + word2, True, WHITE)
+    text_surface2 = font.render("Word 2: " + words[1], True, WHITE)
     text_rect2 = text_surface2.get_rect(topleft=(200, 350))
     windowSurface.blit(text_surface2, text_rect2)
 
@@ -96,6 +103,11 @@ def game():
     text_surface3 = font.render("Your Guess: " + input_text, True, WHITE)
     text_rect3 = text_surface3.get_rect(topleft=(200, 400))
     windowSurface.blit(text_surface3, text_rect3)
+
+    
+    text_surface2 = font.render("Answer: " + ans_display, True, WHITE)
+    text_rect2 = text_surface2.get_rect(topleft=(200, 450))
+    windowSurface.blit(text_surface2, text_rect2)
 
     pygame.display.update()
 
@@ -109,15 +121,26 @@ def game():
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
                 # Here you would check the entered guess against the link
-                check_guess(input_text)
-                input_text = ""  # Clear the input for the next guess
+                if link.check_guess(input_text):
+                    print('correct')
+                    input_text = ""  # Clear the input for the next guess
+                    words = link.get_words()
+                    ans_display = ""
+                else:
+                    print('incorrect')
+                    ans_display = ""
+                    for i in range(link.ans_len()):
+                        if input_text[i] == link.get_ans()[i]:
+                            ans_display += input_text[i]
+                        else:
+                            ans_display += "_"
+                    input_text = ""  # Clear the input for the next guess
+                
             else:
-                input_text += event.unicode  # Add the character to the input text
+                if len(input_text) < link.ans_len():
+                    input_text += event.unicode  # Add the character to the input text
 
-def check_guess(guess):
-    # Here you would check the guess against the link between word1 and word2
-    # For now, let's just print the guess
-    print("Your guess:", guess)
+
 
 # Main game loop
 while True:
@@ -129,8 +152,12 @@ while True:
 
     if game_state == "start_menu":  # if game is in the start menu
         draw_start_menu()
+        # words = link.get_words()
 
     elif game_state == "game":  # if game is in the game
+        # words = link.get_words()
+        # word1 = words[0]
+        # word2 = words[1]
         game()
 
     mainClock.tick(40)
