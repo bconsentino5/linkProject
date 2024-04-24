@@ -31,14 +31,15 @@ def draw_start_menu():
 
     # Load the PNG image
     logo = pygame.image.load('screen.png')
-    logo = pygame.transform.scale(logo, (1700, 1300)) #size of image
+    logo = pygame.transform.scale(logo, (1800, 1700)) #size of image
+
     play = pygame.image.load('pressSPACE.png')
-    play = pygame.transform.scale(play, (800, 400)) #size of image
+    play = pygame.transform.scale(play, (600, 300)) #size of image
 
     # Location of image
-    logo_rect = logo.get_rect(topleft=(-450, -250))
+    logo_rect = logo.get_rect(topleft=(-500, -400))
 
-    play_rect = play.get_rect(topleft=(100, 500))
+    play_rect = play.get_rect(topleft=(200, 500))
 
     #shows stuff on screen
     windowSurface.blit(logo, logo_rect) 
@@ -53,16 +54,20 @@ def start_game():
 def game():
 
     windowSurface.fill(BLACK) #makes screen black
-    
-    # Draw rectangle
-    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700)) #big rectangle
-    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600)) #small rectangle
+
+    clouds = pygame.image.load('clouds.png') #import image
+    clouds = pygame.transform.scale(clouds, (1800, 1200)) #size of image
+    clouds_rect = clouds.get_rect(topleft=(-300, -280)) #postition of image
+    windowSurface.blit(clouds, clouds_rect) #puts image on screen
 
     logo = pygame.image.load('LINK_logo.png') #import image
     logo = pygame.transform.scale(logo, (400, 200)) #size of image
     logo_rect = logo.get_rect(topleft=(300, 50)) #postition of image
     windowSurface.blit(logo, logo_rect) #puts image on screen
     
+    # Draw rectangle
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700)) #big rectangle
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600)) #small rectangle
 
     pygame.display.update()
 
