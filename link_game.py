@@ -30,13 +30,14 @@ def draw_start_menu():
     windowSurface.fill(BLACK) 
 
     # Load the PNG image
-    logo = pygame.image.load('LINK_logo.png')
-    logo = pygame.transform.scale(logo, (800, 400)) #size of image
+    logo = pygame.image.load('screen.png')
+    logo = pygame.transform.scale(logo, (1700, 1300)) #size of image
     play = pygame.image.load('pressSPACE.png')
     play = pygame.transform.scale(play, (800, 400)) #size of image
 
     # Location of image
-    logo_rect = logo.get_rect(topleft=(100, 100))
+    logo_rect = logo.get_rect(topleft=(-450, -250))
+
     play_rect = play.get_rect(topleft=(100, 500))
 
     #shows stuff on screen
