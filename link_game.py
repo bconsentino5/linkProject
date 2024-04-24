@@ -14,7 +14,7 @@ pygame.display.set_caption("Link")
 
 # colors
 WHITE = (255, 255, 255)
-BLACK = (0,0,0)
+BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 PINK = (206, 7, 232)
@@ -22,9 +22,11 @@ PURPLE = (151, 7, 250)
 DARKPURPLE = (90, 3, 149)
 GRAY = (28, 28, 28)
 
-
-#start menu stuff
+# start menu stuff
 game_state = 'start_menu'
+
+# Initialize input_text
+input_text = ""
 
 def draw_start_menu():
     windowSurface.fill(BLACK) 
@@ -46,12 +48,20 @@ def draw_start_menu():
     windowSurface.blit(play, play_rect) 
     pygame.display.update()
 
-#main game page
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == K_SPACE:
+                start_game()
+
+# main game page
 def start_game():
     global game_state
     game_state = "game"
+    global input_text
+    input_text = ""
 
 def game():
+    global input_text  # Declare input_text as global
 
     windowSurface.fill(BLACK) #makes screen black
 
@@ -69,7 +79,45 @@ def game():
     pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700)) #big rectangle
     pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600)) #small rectangle
 
+    # Display typed text
+    font = pygame.font.SysFont(None, 36)
+    text_surface = font.render(input_text, True, WHITE)
+    text_rect = text_surface.get_rect(topleft=(200, 300))
+    windowSurface.blit(text_surface, text_rect)
+
     pygame.display.update()
+
+    # Handle typing
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == KEYDOWN:
+            if event.key == K_BACKSPACE:
+                input_text = input_text[:-1]  # Remove last character
+            elif event.key == K_RETURN:
+                # Here you would handle the entered word, for now just print it
+                print("Entered word:", input_text)
+                input_text = ""  # Clear the input for the next word
+            else:
+                input_text += event.unicode  # Add the character to the input text
+
+# Main game loop
+while True:
+    # Check for quit
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    if game_state == "start_menu":  # if game is in the start menu
+        draw_start_menu()
+
+    elif game_state == "game":  # if game is in the game
+        game()
+
+    mainClock.tick(40)
+
 
 # Main game loop
 while True:

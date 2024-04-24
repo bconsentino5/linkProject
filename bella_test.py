@@ -191,25 +191,25 @@ WORDS = response.content.split()
 
 
 levels = {'1': ['mom', 'dad', 'parents'], 
-          '2': ['bird', 'plane', 'fly'], 
-          '3': ['heel', 'bark', 'dog'],
-          '4': ['tree', 'glue', 'stick'],
-          '5': ['theme', 'swing', 'park'],
-          '6': ['football', 'smartphone', 'screen'],
-          '7': ['computer', 'door', 'key'],
-          '8': ['technology', 'fruit', 'apple'],
-          '9': ['trust', 'religion', 'faith'],
-          '10': ['animal', 'pooper', 'party'],
-          '11': ['wind', 'string', 'instrument'],
-          '12': ['bowtie', 'wheel', 'pasta'],
-          '12': ['dog', 'chair', 'sit'],
-          '14': ['pumpkin', 'slipper', 'cinderella'],
-          '15': ['cheese', 'color', 'wheel'],
-          '16': ['shoe', 'spirit', 'soul'],
-          '17': ['leap', 'amphibian', 'frog'],
-          '18': ['slice', 'italy', 'pizza'],
-          '19': ['heart', 'music', 'beat'],
-          '20': ['dairy', 'nut', 'butter']}
+          '2': ['bird', 'plane', 'fly']} 
+          # '3': ['heel', 'bark', 'dog'],
+          # '4': ['tree', 'glue', 'stick'],
+          # '5': ['theme', 'swing', 'park'],
+          # '6': ['football', 'smartphone', 'screen'],
+          # '7': ['computer', 'door', 'key'],
+          # '8': ['technology', 'fruit', 'apple'],
+          # '9': ['trust', 'religion', 'faith'],
+          # '10': ['animal', 'pooper', 'party'],
+          # '11': ['wind', 'string', 'instrument'],
+          # '12': ['bowtie', 'wheel', 'pasta'],
+          # '12': ['dog', 'chair', 'sit'],
+          # '14': ['pumpkin', 'slipper', 'cinderella'],
+          # '15': ['cheese', 'color', 'wheel'],
+          # '16': ['shoe', 'spirit', 'soul'],
+          # '17': ['leap', 'amphibian', 'frog'],
+          # '18': ['slice', 'italy', 'pizza'],
+          # '19': ['heart', 'music', 'beat'],
+          # '20': ['dairy', 'nut', 'butter']}
 
 curr_level = 1
 lives = 5
@@ -249,7 +249,7 @@ while lives != 0:
       print()
       curr_level += 1
       temp = 0
-      if curr_level > 20:
+      if curr_level > 2:
         while temp == 0:
             curr_word = random.choice(WORDS).decode('utf-8')
             if len(curr_word) < 8:
