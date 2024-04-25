@@ -2,6 +2,11 @@ import pygame
 import sys
 from pygame.locals import *
 
+from nltk.corpus import wordnet
+import random
+import requests
+
+
 # Set up pygame
 pygame.init()
 mainClock = pygame.time.Clock()
@@ -29,8 +34,8 @@ game_state = 'start_menu'
 input_text = ""
 
 # Words for the game
-word1 = "apple"
-word2 = "pie"
+word1 = "mom"
+word2 = "dad"
 
 def draw_start_menu():
     windowSurface.fill(BLACK)
@@ -64,15 +69,17 @@ def start_game():
     input_text = ""
 
 def game():
-    global input_text  # Declare input_text as global
+    global input_text  # Declare input_text as global variable
 
     windowSurface.fill(BLACK)
 
+    # background of game screen
     clouds = pygame.image.load('clouds.png')
     clouds = pygame.transform.scale(clouds, (1800, 1200))
     clouds_rect = clouds.get_rect(topleft=(-300, -280))
     windowSurface.blit(clouds, clouds_rect)
 
+    #logo at the top of the game screen
     logo = pygame.image.load('LINK_logo.png')
     logo = pygame.transform.scale(logo, (400, 200))
     logo_rect = logo.get_rect(topleft=(300, 50))
@@ -115,8 +122,6 @@ def game():
                 input_text += event.unicode  # Add the character to the input text
 
 def check_guess(guess):
-    # Here you would check the guess against the link between word1 and word2
-    # For now, let's just print the guess
     print("Your guess:", guess)
 
 # Main game loop
