@@ -144,8 +144,9 @@ def game():
                 if link.check_guess(input_text):
                     print('correct')
                     # Display "Correct" on the screen
+                    ans_display = ""
                     ans_display = link.get_ans()
-                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + str(link.get_ans()), True, WHITE)
                     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
                     windowSurface.blit(text_surface4, text_rect4)
                     input_text = ""  # Clear the input for the next guess
@@ -172,6 +173,7 @@ def game():
                         else:
                             ans_display += "_"
                     input_text = ""  # Clear the input for the next guess
+
                 
             else:
                 if len(input_text) < link.ans_len():
