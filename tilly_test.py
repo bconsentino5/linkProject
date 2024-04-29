@@ -150,7 +150,7 @@ def game():
                     windowSurface.blit(text_surface4, text_rect4)
                     input_text = ""  # Clear the input for the next guess
 
-                    correct_text = font.render("Correct! press space to continue", True, GREEN)
+                    correct_text = font.render("Correct! press any key to continue", True, GREEN)
                     correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
                     windowSurface.blit(correct_text, correct_rect)
                     pygame.display.update()
