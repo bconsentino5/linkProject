@@ -1,6 +1,12 @@
 import pygame
 import sys
 from pygame.locals import *
+from combo import Link
+
+from nltk.corpus import wordnet
+import random
+import requests
+
 
 # Set up pygame
 pygame.init()
@@ -21,31 +27,46 @@ PINK = (206, 7, 232)
 PURPLE = (151, 7, 250)
 DARKPURPLE = (90, 3, 149)
 GRAY = (28, 28, 28)
+RED = (255, 0, 0)
 
-# start menu stuff
+# Start menu stuff
 game_state = 'start_menu'
 
 # Initialize input_text
 input_text = ""
 
+# Words for the game
+word1 = "mom"
+word2 = "dad"
+ans_display = ""
+
+link = Link()
+words = link.get_words()
+
+
 def draw_start_menu():
-    windowSurface.fill(BLACK) 
+    windowSurface.fill(BLACK)
+
+    clouds = pygame.image.load('clouds.png')
+    clouds = pygame.transform.scale(clouds, (1800, 1200))
+    clouds_rect = clouds.get_rect(topleft=(-400, -280))
+    windowSurface.blit(clouds, clouds_rect)
 
     # Load the PNG image
-    logo = pygame.image.load('screen.png')
-    logo = pygame.transform.scale(logo, (1800, 1700)) #size of image
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (1000, 900))  # Size of image
 
     play = pygame.image.load('pressSPACE.png')
-    play = pygame.transform.scale(play, (600, 300)) #size of image
+    play = pygame.transform.scale(play, (600, 300))  # Size of image
 
     # Location of image
-    logo_rect = logo.get_rect(topleft=(-500, -400))
+    logo_rect = logo.get_rect(topleft=(-10, -150))
 
     play_rect = play.get_rect(topleft=(200, 500))
 
-    #shows stuff on screen
-    windowSurface.blit(logo, logo_rect) 
-    windowSurface.blit(play, play_rect) 
+    # Shows stuff on screen
+    windowSurface.blit(logo, logo_rect)
+    windowSurface.blit(play, play_rect)
     pygame.display.update()
 
     for event in pygame.event.get():
@@ -53,37 +74,69 @@ def draw_start_menu():
             if event.key == K_SPACE:
                 start_game()
 
-# main game page
 def start_game():
     global game_state
     game_state = "game"
     global input_text
     input_text = ""
+    
 
 def game():
+    global input_text  # Declare input_text as global variable
     global input_text  # Declare input_text as global
+    global words
+    global ans_display
 
-    windowSurface.fill(BLACK) #makes screen black
+    windowSurface.fill(BLACK)
 
-    clouds = pygame.image.load('clouds.png') #import image
-    clouds = pygame.transform.scale(clouds, (1800, 1200)) #size of image
-    clouds_rect = clouds.get_rect(topleft=(-300, -280)) #postition of image
-    windowSurface.blit(clouds, clouds_rect) #puts image on screen
+    # background of game screen
+    clouds = pygame.image.load('clouds.png')
+    clouds = pygame.transform.scale(clouds, (1800, 1200))
+    clouds_rect = clouds.get_rect(topleft=(-300, -280))
+    windowSurface.blit(clouds, clouds_rect)
 
-    logo = pygame.image.load('LINK_logo.png') #import image
-    logo = pygame.transform.scale(logo, (400, 200)) #size of image
-    logo_rect = logo.get_rect(topleft=(300, 50)) #postition of image
-    windowSurface.blit(logo, logo_rect) #puts image on screen
-    
+    #logo at the top of the game screen
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (400, 200))
+    logo_rect = logo.get_rect(topleft=(300, 50))
+    windowSurface.blit(logo, logo_rect)
+
     # Draw rectangle
-    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700)) #big rectangle
-    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600)) #small rectangle
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
 
-    # Display typed text
+    # Display the two words to the player
+    
     font = pygame.font.SysFont(None, 36)
-    text_surface = font.render(input_text, True, WHITE)
+    text_surface5 = font.render("Level " + str(link.get_curr_level()), True, WHITE)
+    text_rect5 = text_surface5.get_rect(topleft=(700, 252))
+    windowSurface.blit(text_surface5, text_rect5)
+
+    font = pygame.font.SysFont(None, 36)
+    text_surface6 = font.render("Lives: " + str(link.get_lives()), True, WHITE)
+    text_rect6 = text_surface6.get_rect(topleft=(200, 252))
+    windowSurface.blit(text_surface6, text_rect6)
+
+    text_surface = font.render("Word 1: " + words[0], True, WHITE)
     text_rect = text_surface.get_rect(topleft=(200, 300))
     windowSurface.blit(text_surface, text_rect)
+
+    text_surface2 = font.render("Word 2: " + words[1], True, WHITE)
+    text_rect2 = text_surface2.get_rect(topleft=(200, 350))
+    windowSurface.blit(text_surface2, text_rect2)
+
+    # Display typed text
+    text_surface3 = font.render("Your Guess: " + input_text, True, WHITE)
+    text_rect3 = text_surface3.get_rect(topleft=(200, 400))
+    windowSurface.blit(text_surface3, text_rect3)
+
+    
+    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+    windowSurface.blit(text_surface4, text_rect4)
+
+    print(ans_display)
+
 
     pygame.display.update()
 
@@ -96,11 +149,57 @@ def game():
             if event.key == K_BACKSPACE:
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
-                # Here you would handle the entered word, for now just print it
-                print("Entered word:", input_text)
-                input_text = ""  # Clear the input for the next word
+                # check the entered guess against the link
+                if link.check_guess(input_text):
+                    print('correct')
+                    ans_display = ""
+                    # Display "Correct" on the screen
+                    ans_display = link.get_ans()
+                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+                    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+                    windowSurface.blit(text_surface4, text_rect4)
+
+                    correct_text = font.render("Correct! press any key to continue", True, GREEN)
+                    correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                    windowSurface.blit(correct_text, correct_rect)
+                    pygame.display.update()
+
+                    # Wait for space bar to continue
+                    waiting = True
+                    while waiting:
+                        for event in pygame.event.get():
+                            if event.type == KEYDOWN:
+                                waiting = False
+                                ans_display = ""
+                    input_text = ""  
+                    words = link.get_words()
+                else:
+                    print('incorrect')
+                    
+                    ans_display = ""
+                    if link.ans_len() == len(input_text):
+                        for i in range(link.ans_len()):
+                            if input_text[i] == link.get_ans()[i]:
+                                ans_display += input_text[i]
+                            else:
+                                ans_display += "_"
+                    else:
+                        incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
+                        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                        windowSurface.blit(incorrect_text, incorrect_rect)
+                        pygame.display.update()
+                        waiting = True
+                        while waiting:
+                            for event in pygame.event.get():
+                                if event.type == KEYDOWN:
+                                    waiting = False
+                    input_text = ""  # Clear the input for the next guess
+
+                
             else:
-                input_text += event.unicode  # Add the character to the input text
+                if len(input_text) < link.ans_len():
+                    input_text += event.unicode  # Add the character to the input text
+
 
 # Main game loop
 while True:
@@ -112,27 +211,23 @@ while True:
 
     if game_state == "start_menu":  # if game is in the start menu
         draw_start_menu()
+        # words = link.get_words()
 
     elif game_state == "game":  # if game is in the game
+        # words = link.get_words()
+        # word1 = words[0]
+        # word2 = words[1]
         game()
 
     mainClock.tick(40)
 
 
-# Main game loop
-while True:
-    # Check for quit
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-
-    if game_state == "start_menu": #if game is in the start menu
-        draw_start_menu()
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]: #if space bar pressed it will take you to game
-            start_game()
-
-    elif game_state == "game": #if game is in the game
-        game()
-        mainClock.tick(40)
+'''
+to do:
+- instruction screen
+- hard/easy mode
+- randomize first 20 levels
+- polish font/colors
+- fix incorrect state for randomized words
+- fix underscore part 
+'''
