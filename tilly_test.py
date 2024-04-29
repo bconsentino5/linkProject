@@ -158,7 +158,7 @@ def game():
                     waiting = True
                     while waiting:
                         for event in pygame.event.get():
-                            if event.type == KEYDOWN
+                            if event.type == KEYDOWN:
                                 waiting = False
                     input_text = ""  
                     words = link.get_words()
