@@ -131,10 +131,21 @@ def game():
             if event.key == K_BACKSPACE:
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
-                # Here you would check the entered guess against the link
+                # check the entered guess against the link
                 if link.check_guess(input_text):
                     print('correct')
-                    input_text = ""  # Clear the input for the next guess
+                    # Display "Correct" on the screen
+                    correct_text = font.render("Correct! press space to continue", True, GREEN)
+                    correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                    windowSurface.blit(correct_text, correct_rect)
+                    pygame.display.update()
+                    # Wait for space bar to continue
+                    waiting = True
+                    while waiting:
+                        for event in pygame.event.get():
+                            if event.type == KEYDOWN and event.key == K_SPACE:
+                                waiting = False
+                    input_text = ""  
                     words = link.get_words()
                     ans_display = ""
                 else:
