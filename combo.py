@@ -6,7 +6,7 @@ word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
 response = requests.get(word_site)
 WORDS = response.content.split()
 
-max_levels = 20
+max_levels = 2
 levels = {'1': ['mom', 'dad', 'parents'], 
           '2': ['bird', 'plane', 'fly'],
           '3': ['heel', 'bark', 'dog'],
@@ -34,7 +34,6 @@ class Link():
         self.lives = 5
         self.ans = ""
 
-
     def ans_len(self):
         return len(self.ans)
     
@@ -43,6 +42,9 @@ class Link():
     
     def get_curr_level(self):
         return self.curr_level
+    
+    def get_lives(self):
+        return self.lives
 
     def get_words(self):
         temp = 0

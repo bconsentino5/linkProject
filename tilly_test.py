@@ -27,6 +27,7 @@ PINK = (206, 7, 232)
 PURPLE = (151, 7, 250)
 DARKPURPLE = (90, 3, 149)
 GRAY = (28, 28, 28)
+RED = (255, 0, 0)
 
 # Start menu stuff
 game_state = 'start_menu'
@@ -108,8 +109,13 @@ def game():
     
     font = pygame.font.SysFont(None, 36)
     text_surface5 = font.render("Level " + str(link.get_curr_level()), True, WHITE)
-    text_rect5 = text_surface5.get_rect(topleft=(700, 300))
+    text_rect5 = text_surface5.get_rect(topleft=(700, 252))
     windowSurface.blit(text_surface5, text_rect5)
+
+    font = pygame.font.SysFont(None, 36)
+    text_surface6 = font.render("Lives: " + str(link.get_lives()), True, WHITE)
+    text_rect6 = text_surface6.get_rect(topleft=(200, 252))
+    windowSurface.blit(text_surface6, text_rect6)
 
     text_surface = font.render("Word 1: " + words[0], True, WHITE)
     text_rect = text_surface.get_rect(topleft=(200, 300))
@@ -129,6 +135,9 @@ def game():
     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
     windowSurface.blit(text_surface4, text_rect4)
 
+    print(ans_display)
+
+
     pygame.display.update()
 
     # Handle typing
@@ -143,35 +152,47 @@ def game():
                 # check the entered guess against the link
                 if link.check_guess(input_text):
                     print('correct')
-                    # Display "Correct" on the screen
                     ans_display = ""
+                    # Display "Correct" on the screen
                     ans_display = link.get_ans()
-                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + str(link.get_ans()), True, WHITE)
+                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
                     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
                     windowSurface.blit(text_surface4, text_rect4)
-                    input_text = ""  # Clear the input for the next guess
 
                     correct_text = font.render("Correct! press any key to continue", True, GREEN)
                     correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
                     windowSurface.blit(correct_text, correct_rect)
                     pygame.display.update()
+
                     # Wait for space bar to continue
                     waiting = True
                     while waiting:
                         for event in pygame.event.get():
                             if event.type == KEYDOWN:
                                 waiting = False
+                                ans_display = ""
                     input_text = ""  
                     words = link.get_words()
-                    ans_display = ""
                 else:
                     print('incorrect')
+                    
                     ans_display = ""
-                    for i in range(link.ans_len()):
-                        if input_text[i] == link.get_ans()[i]:
-                            ans_display += input_text[i]
-                        else:
-                            ans_display += "_"
+                    if link.ans_len() == len(input_text):
+                        for i in range(link.ans_len()):
+                            if input_text[i] == link.get_ans()[i]:
+                                ans_display += input_text[i]
+                            else:
+                                ans_display += "_"
+                    else:
+                        incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
+                        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                        windowSurface.blit(incorrect_text, incorrect_rect)
+                        pygame.display.update()
+                        waiting = True
+                        while waiting:
+                            for event in pygame.event.get():
+                                if event.type == KEYDOWN:
+                                    waiting = False
                     input_text = ""  # Clear the input for the next guess
 
                 
@@ -179,9 +200,6 @@ def game():
                 if len(input_text) < link.ans_len():
                     input_text += event.unicode  # Add the character to the input text
 
-
-def check_guess(guess):
-    print("Your guess:", guess)
 
 # Main game loop
 while True:
@@ -202,3 +220,14 @@ while True:
         game()
 
     mainClock.tick(40)
+
+
+'''
+to do:
+- instruction screen
+- hard/easy mode
+- randomize first 20 levels
+- polish font/colors
+- fix incorrect state for randomized words
+- fix underscore part 
+'''
