@@ -6,7 +6,7 @@ word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
 response = requests.get(word_site)
 WORDS = response.content.split()
 
-max_levels = 2
+max_levels = 20
 levels = {'1': ['mom', 'dad', 'parents'], 
           '2': ['bird', 'plane', 'fly'],
           '3': ['heel', 'bark', 'dog'],
