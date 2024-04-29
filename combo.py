@@ -6,27 +6,27 @@ word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
 response = requests.get(word_site)
 WORDS = response.content.split()
 
-max_levels = 2
+max_levels = 20
 levels = {'1': ['mom', 'dad', 'parents'], 
-          '2': ['bird', 'plane', 'fly']} 
-        #   '3': ['heel', 'bark', 'dog'],
-        #   '4': ['tree', 'glue', 'stick'],
-        #   '5': ['theme', 'swing', 'park'],
-        #   '6': ['football', 'smartphone', 'screen'],
-        #   '7': ['computer', 'door', 'key'],
-        #   '8': ['technology', 'fruit', 'apple'],
-        #   '9': ['trust', 'religion', 'faith'],
-        #   '10': ['animal', 'pooper', 'party'],
-        #   '11': ['wind', 'string', 'instrument'],
-        #   '12': ['bowtie', 'wheel', 'pasta'],
-        #   '13': ['dog', 'chair', 'sit'],
-        #   '14': ['pumpkin', 'slipper', 'cinderella'],
-        #   '15': ['cheese', 'color', 'wheel'],
-        #   '16': ['shoe', 'spirit', 'soul'],
-        #   '17': ['leap', 'amphibian', 'frog'],
-        #   '18': ['slice', 'italy', 'pizza'],
-        #   '19': ['heart', 'music', 'beat'],
-        #   '20': ['dairy', 'nut', 'butter']}
+          '2': ['bird', 'plane', 'fly'],
+          '3': ['heel', 'bark', 'dog'],
+          '4': ['tree', 'glue', 'stick'],
+          '5': ['theme', 'swing', 'park'],
+          '6': ['football', 'smartphone', 'screen'],
+          '7': ['computer', 'door', 'key'],
+          '8': ['technology', 'fruit', 'apple'],
+          '9': ['trust', 'religion', 'faith'],
+          '10': ['animal', 'pooper', 'party'],
+          '11': ['wind', 'string', 'instrument'],
+          '12': ['bowtie', 'wheel', 'pasta'],
+          '13': ['dog', 'chair', 'sit'],
+          '14': ['pumpkin', 'slipper', 'cinderella'],
+          '15': ['cheese', 'color', 'wheel'],
+          '16': ['shoe', 'spirit', 'soul'],
+          '17': ['leap', 'amphibian', 'frog'],
+          '18': ['slice', 'italy', 'pizza'],
+          '19': ['heart', 'music', 'beat'],
+          '20': ['dairy', 'nut', 'butter']}
 
 class Link():
     def __init__(self):
@@ -40,6 +40,9 @@ class Link():
     
     def get_ans(self):
         return self.ans
+    
+    def get_curr_level(self):
+        return self.curr_level
 
     def get_words(self):
         temp = 0

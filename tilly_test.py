@@ -46,15 +46,20 @@ words = link.get_words()
 def draw_start_menu():
     windowSurface.fill(BLACK)
 
+    clouds = pygame.image.load('clouds.png')
+    clouds = pygame.transform.scale(clouds, (1800, 1200))
+    clouds_rect = clouds.get_rect(topleft=(-400, -280))
+    windowSurface.blit(clouds, clouds_rect)
+
     # Load the PNG image
-    logo = pygame.image.load('screen.png')
-    logo = pygame.transform.scale(logo, (1800, 1700))  # Size of image
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (1000, 900))  # Size of image
 
     play = pygame.image.load('pressSPACE.png')
     play = pygame.transform.scale(play, (600, 300))  # Size of image
 
     # Location of image
-    logo_rect = logo.get_rect(topleft=(-500, -400))
+    logo_rect = logo.get_rect(topleft=(-10, -150))
 
     play_rect = play.get_rect(topleft=(200, 500))
 
@@ -102,6 +107,10 @@ def game():
     # Display the two words to the player
     
     font = pygame.font.SysFont(None, 36)
+    text_surface5 = font.render("Level " + str(link.get_curr_level()), True, WHITE)
+    text_rect5 = text_surface5.get_rect(topleft=(700, 300))
+    windowSurface.blit(text_surface5, text_rect5)
+
     text_surface = font.render("Word 1: " + words[0], True, WHITE)
     text_rect = text_surface.get_rect(topleft=(200, 300))
     windowSurface.blit(text_surface, text_rect)
@@ -116,9 +125,9 @@ def game():
     windowSurface.blit(text_surface3, text_rect3)
 
     
-    text_surface2 = font.render("Answer: " + ans_display, True, WHITE)
-    text_rect2 = text_surface2.get_rect(topleft=(200, 450))
-    windowSurface.blit(text_surface2, text_rect2)
+    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+    windowSurface.blit(text_surface4, text_rect4)
 
     pygame.display.update()
 
@@ -135,6 +144,12 @@ def game():
                 if link.check_guess(input_text):
                     print('correct')
                     # Display "Correct" on the screen
+                    ans_display = link.get_ans()
+                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+                    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+                    windowSurface.blit(text_surface4, text_rect4)
+                    input_text = ""  # Clear the input for the next guess
+
                     correct_text = font.render("Correct! press space to continue", True, GREEN)
                     correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
                     windowSurface.blit(correct_text, correct_rect)
