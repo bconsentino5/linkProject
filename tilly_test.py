@@ -152,12 +152,15 @@ def game():
                 # check the entered guess against the link
                 if link.check_guess(input_text):
                     print('correct')
-                    ans_display = ""
                     # Display "Correct" on the screen
-                    ans_display = link.get_ans()
-                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
-                    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
-                    windowSurface.blit(text_surface4, text_rect4)
+                    print(ans_display)
+                    ans_display = ""
+                    for i in range(link.ans_len()):
+                            ans_display += input_text[i]
+                    print(ans_display)
+                    # text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+                    # text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+                    # windowSurface.blit(text_surface4, text_rect4)
 
                     correct_text = font.render("Correct! press any key to continue", True, GREEN)
                     correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
@@ -167,6 +170,7 @@ def game():
                     # Wait for space bar to continue
                     waiting = True
                     while waiting:
+                        ans_display = link.get_ans()
                         for event in pygame.event.get():
                             if event.type == KEYDOWN:
                                 waiting = False
