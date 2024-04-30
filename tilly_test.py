@@ -136,6 +136,10 @@ def game():
     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
     windowSurface.blit(text_surface4, text_rect4)
 
+    text_surface5 = font.render("enter '1' to get a hint by sacraficing one life", True, WHITE)
+    text_rect5 = text_surface5.get_rect(topleft=(240, 500))
+    windowSurface.blit(text_surface5, text_rect5)
+
     pygame.display.update()
 
     # Handle typing
@@ -147,8 +151,31 @@ def game():
             if event.key == K_BACKSPACE:
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
+                # check if they want a hint
+                if input_text == '1':
+                    link.set_lives(1)
+                    ans_display = ""
+                    hint_string = ""
+                    hint_i = random.randrange(0, link.ans_len())
+                    for i in range(link.ans_len()):
+                        hint_string += "_"
+                        print(hint_string)
+                    for i in range(link.ans_len()):
+                        if i == hint_i:
+                            if (hint_string[i] == "_"):
+                                hint_string += link.ans[i]
+                            else:
+                                hint_i = random.randrange(0, link.ans_len())
+                                i -= 1
+                        else:
+                            hint_string += "_"
+                     # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
+                            
+                        
+                    input_text = ""
+
                 # check the entered guess against the link
-                if link.check_guess(input_text):
+                elif link.check_guess(input_text):
                     print('correct')
                     # Display "Correct" on the screen
                     ans_display = ""
@@ -275,4 +302,6 @@ to do:
 - polish font/colors
 - fix incorrect state for randomized words
 - fix underscore part 
+- reorganize levels
+- hint option
 '''
