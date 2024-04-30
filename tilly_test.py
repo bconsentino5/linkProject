@@ -86,6 +86,7 @@ def game():
     global input_text  # Declare input_text as global
     global words
     global ans_display
+    global game_state
 
     windowSurface.fill(BLACK)
 
@@ -174,30 +175,72 @@ def game():
                     words = link.get_words()
                 else:
                     print('incorrect')
-                    
-                    ans_display = ""
-                    if link.ans_len() == len(input_text):
-                        for i in range(link.ans_len()):
-                            if input_text[i] == link.get_ans()[i]:
-                                ans_display += input_text[i]
-                            else:
-                                ans_display += "_"
+                    link.set_lives(1)
+                    if link.get_lives() == 0:
+                        game_state = "gameover"
                     else:
-                        incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
-                        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-                        windowSurface.blit(incorrect_text, incorrect_rect)
-                        pygame.display.update()
-                        waiting = True
-                        while waiting:
-                            for event in pygame.event.get():
-                                if event.type == KEYDOWN:
-                                    waiting = False
-                    input_text = ""  # Clear the input for the next guess
+                        ans_display = ""
+                        if link.ans_len() == len(input_text):
+                            for i in range(link.ans_len()):
+                                if input_text[i] == link.get_ans()[i]:
+                                    ans_display += input_text[i]
+                                else:
+                                    ans_display += "_"
+                        else:
+                            incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
+                            incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                            windowSurface.blit(incorrect_text, incorrect_rect)
+                            pygame.display.update()
+                            waiting = True
+                            while waiting:
+                                for event in pygame.event.get():
+                                    if event.type == KEYDOWN:
+                                        waiting = False
+                        input_text = ""  # Clear the input for the next guess
 
                 
             else:
                 if len(input_text) < link.ans_len():
                     input_text += event.unicode  # Add the character to the input text
+
+def gameover():
+    global input_text  # Declare input_text as global variable
+    global input_text  # Declare input_text as global
+    global words
+    global ans_display
+
+    windowSurface.fill(BLACK)
+
+    # background of game screen
+    clouds = pygame.image.load('clouds.png')
+    clouds = pygame.transform.scale(clouds, (1800, 1200))
+    clouds_rect = clouds.get_rect(topleft=(-300, -280))
+    windowSurface.blit(clouds, clouds_rect)
+
+    #logo at the top of the game screen
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (400, 200))
+    logo_rect = logo.get_rect(topleft=(300, 50))
+    windowSurface.blit(logo, logo_rect)
+
+    # Draw rectangle
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
+
+    # Display the two words to the player
+    
+    font = pygame.font.SysFont(None, 36)
+    text_surface4 = font.render("gameover.", True, WHITE)
+    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+    windowSurface.blit(text_surface4, text_rect4)
+
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        
 
 
 # Main game loop
@@ -217,6 +260,9 @@ while True:
         # word1 = words[0]
         # word2 = words[1]
         game()
+
+    elif game_state == "gameover":
+        gameover()
 
     mainClock.tick(40)
 

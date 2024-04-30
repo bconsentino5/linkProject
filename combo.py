@@ -45,6 +45,9 @@ class Link():
     
     def get_lives(self):
         return self.lives
+    
+    def set_lives(self, num):
+        self.lives -= num
 
     def get_words(self):
         temp = 0
