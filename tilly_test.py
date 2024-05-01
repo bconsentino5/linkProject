@@ -92,7 +92,7 @@ def draw_start_menu():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game_state = "instructions"  # Update game_state here
-                    draw_instructions()
+                    
 
 def draw_instructions():
     global game_state
@@ -122,27 +122,25 @@ def draw_instructions():
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-                start_game()
+                game()
                 return
-
-
-def start_game():
-    global game_state
-    game_state = "game"
-    global input_text
-    input_text = ""
     
 
 def game():
+
     global input_text  # Declare input_text as global
     global words
     global ans_display
     global game_state
+    global game_state
+    game_state = "game"
+    global input_text
+    input_text = "" 
 
     windowSurface.fill(BLACK)
 
     if button.is_clicked(pygame.mouse.get_pos()):
-        pass
+        print("clicked")
         #this is where what the button will do
 
     # background of game screen
