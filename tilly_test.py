@@ -92,10 +92,7 @@ def draw_start_menu():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game_state = "instructions"  # Update game_state here
-<<<<<<< HEAD
-=======
                     
->>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
 
 def draw_instructions():
     global game_state
@@ -125,13 +122,7 @@ def draw_instructions():
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-<<<<<<< HEAD
                 game_state = "game"
-
-=======
-                game()
-                return
->>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
     
 
 def game():
@@ -148,12 +139,8 @@ def game():
     windowSurface.fill(BLACK)
 
     if button.is_clicked(pygame.mouse.get_pos()):
-<<<<<<< HEAD
         print('clicked')
-        pass
-=======
-        print("clicked")
->>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
+
         #this is where what the button will do
 
     # background of game screen
