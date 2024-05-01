@@ -343,3 +343,12 @@ while True:
 
     mainClock.tick(40)
 
+'''
+to do:
+- instruction screen
+- hard/easy mode
+- randomize first 20 levels
+- polish font/colors
+- fix incorrect state for randomized words
+- fix underscore part 
+'''
