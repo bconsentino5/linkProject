@@ -7,7 +7,23 @@ from nltk.corpus import wordnet
 import random
 import requests
 
+class Button:
+    def __init__(self, text, position, size):
+        self.text = text
+        self.position = position
+        self.size = size
+        self.rect = pygame.Rect(position, size)
 
+    def draw(self, surface):
+        pygame.draw.rect(surface, GREEN, self.rect)
+        font = pygame.font.SysFont(None, 36)
+        text_surface = font.render(self.text, True, WHITE)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
+    
 # Set up pygame
 pygame.init()
 mainClock = pygame.time.Clock()
@@ -43,8 +59,12 @@ ans_display = ""
 link = Link()
 words = link.get_words()
 
+button = Button("Easy/Hard", (800, 50), (150, 50)) 
+
 
 def draw_start_menu():
+    global game_state
+
     windowSurface.fill(BLACK)
 
     clouds = pygame.image.load('clouds.png')
@@ -61,7 +81,6 @@ def draw_start_menu():
 
     # Location of image
     logo_rect = logo.get_rect(topleft=(-10, -150))
-
     play_rect = play.get_rect(topleft=(200, 500))
 
     # Shows stuff on screen
@@ -76,17 +95,19 @@ def draw_start_menu():
                     draw_instructions()
 
 def draw_instructions():
+    global game_state
+
     windowSurface.fill(BLACK)
     
     # Draw your instructions here
     font = pygame.font.SysFont(None, 36)
     instruction_text = [
         "Instructions:",
-        "- Guess the correct word by typing it.",
-        "- Use BACKSPACE to delete characters.",
-        "- Press ENTER to submit your guess.",
-        "- If your guess is correct, press any key to continue to the next level.",
-        "- If your guess is incorrect, try again."
+        "you are given two words and you need to guess", 
+        "the link between the two",
+        "you are given 5 lives",
+        "when you submit an answer you are given which letters",
+        "you guessed right"
     ]
     y_offset = 200
     for line in instruction_text:
@@ -98,13 +119,11 @@ def draw_instructions():
 
     pygame.display.update()
 
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                    if event.key == K_SPACE:
-                        waiting = False
-                        start_game()
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == K_SPACE:
+                start_game()
+
 
 def start_game():
     global game_state
@@ -114,13 +133,17 @@ def start_game():
     
 
 def game():
-    global input_text  # Declare input_text as global variable
     global input_text  # Declare input_text as global
     global words
     global ans_display
     global game_state
 
     windowSurface.fill(BLACK)
+
+
+    if button.is_clicked(pygame.mouse.get_pos()):
+        pass
+        #this is where what the button will do
 
     # background of game screen
     clouds = pygame.image.load('clouds.png')
@@ -171,6 +194,8 @@ def game():
     text_surface5 = font.render("enter '1' to get a hint by sacraficing one life", True, WHITE)
     text_rect5 = text_surface5.get_rect(topleft=(240, 500))
     windowSurface.blit(text_surface5, text_rect5)
+
+    button.draw(windowSurface)
 
     pygame.display.update()
 
@@ -301,7 +326,6 @@ def gameover():
             sys.exit()
         
 
-
 # Main game loop
 while True:
     # Check for quit
@@ -310,30 +334,14 @@ while True:
             pygame.quit()
             sys.exit()
 
-    if game_state == "start_menu":  # if game is in the start menu
+    if game_state == "start_menu":
         draw_start_menu()
     elif game_state == "instructions":
-        for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                    start_game()
-        # words = link.get_words()
-
-    elif game_state == "game":  # if game is in the game
-        # words = link.get_words()
-        # word1 = words[0]
-        # word2 = words[1]
+        draw_instructions()
+    elif game_state == "game":
         game()
+    elif game_state == "gameover":
+        gameover()
 
     mainClock.tick(40)
 
-'''
-to do:
-- instruction screen
-- hard/easy mode
-- randomize first 20 levels
-- polish font/colors
-- fix incorrect state for randomized words
-- fix underscore part 
-- reorganize levels
-- hint option
-'''

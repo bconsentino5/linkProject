@@ -82,11 +82,11 @@ def draw_instructions():
     font = pygame.font.SysFont(None, 36)
     instruction_text = [
         "Instructions:",
-        "- Guess the correct word by typing it.",
-        "- Use BACKSPACE to delete characters.",
-        "- Press ENTER to submit your guess.",
-        "- If your guess is correct, press any key to continue to the next level.",
-        "- If your guess is incorrect, try again."
+        "you are given two words and you need to guess", 
+        "the link between the two",
+        "you are given 5 lives",
+        "when you submit an answer you are given which letters",
+        "you guessed right"
     ]
     y_offset = 200
     for line in instruction_text:
