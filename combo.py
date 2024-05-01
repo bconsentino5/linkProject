@@ -35,7 +35,7 @@ class Link():
         self.ans = ""
 
     def ans_len(self):
-        return len(self.ans)
+        return int(len(self.ans))
     
     def get_ans(self):
         return self.ans
@@ -45,6 +45,9 @@ class Link():
     
     def get_lives(self):
         return self.lives
+    
+    def set_lives(self, num):
+        self.lives -= num
 
     def get_words(self):
         temp = 0

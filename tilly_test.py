@@ -86,6 +86,7 @@ def game():
     global input_text  # Declare input_text as global
     global words
     global ans_display
+    global game_state
 
     windowSurface.fill(BLACK)
 
@@ -135,8 +136,9 @@ def game():
     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
     windowSurface.blit(text_surface4, text_rect4)
 
-    print(ans_display)
-
+    text_surface5 = font.render("enter '1' to get a hint by sacraficing one life", True, WHITE)
+    text_rect5 = text_surface5.get_rect(topleft=(240, 500))
+    windowSurface.blit(text_surface5, text_rect5)
 
     pygame.display.update()
 
@@ -149,15 +151,39 @@ def game():
             if event.key == K_BACKSPACE:
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
-                # check the entered guess against the link
-                if link.check_guess(input_text):
-                    print('correct')
+                # check if they want a hint
+                if input_text == '1':
+                    link.set_lives(1)
                     ans_display = ""
+                    hint_string = ""
+                    hint_i = random.randrange(0, link.ans_len())
+                    for i in range(link.ans_len()):
+                        hint_string += "_"
+                        print(hint_string)
+                    for i in range(link.ans_len()):
+                        if i == hint_i:
+                            if (hint_string[i] == "_"):
+                                hint_string += link.ans[i]
+                            else:
+                                hint_i = random.randrange(0, link.ans_len())
+                                i -= 1
+                        else:
+                            hint_string += "_"
+                     # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
+                            
+                        
+                    input_text = ""
+
+                # check the entered guess against the link
+                elif link.check_guess(input_text):
+                    print('correct')
                     # Display "Correct" on the screen
-                    ans_display = link.get_ans()
-                    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
-                    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
-                    windowSurface.blit(text_surface4, text_rect4)
+                    ans_display = ""
+                    for i in range(link.ans_len()):
+                            ans_display += input_text[i]
+                    # text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+                    # text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+                    # windowSurface.blit(text_surface4, text_rect4)
 
                     correct_text = font.render("Correct! press any key to continue", True, GREEN)
                     correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
@@ -167,6 +193,7 @@ def game():
                     # Wait for space bar to continue
                     waiting = True
                     while waiting:
+                        ans_display = link.get_ans()
                         for event in pygame.event.get():
                             if event.type == KEYDOWN:
                                 waiting = False
@@ -175,30 +202,72 @@ def game():
                     words = link.get_words()
                 else:
                     print('incorrect')
-                    
-                    ans_display = ""
-                    if link.ans_len() == len(input_text):
-                        for i in range(link.ans_len()):
-                            if input_text[i] == link.get_ans()[i]:
-                                ans_display += input_text[i]
-                            else:
-                                ans_display += "_"
+                    link.set_lives(1)
+                    if link.get_lives() == 0:
+                        game_state = "gameover"
                     else:
-                        incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
-                        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-                        windowSurface.blit(incorrect_text, incorrect_rect)
-                        pygame.display.update()
-                        waiting = True
-                        while waiting:
-                            for event in pygame.event.get():
-                                if event.type == KEYDOWN:
-                                    waiting = False
-                    input_text = ""  # Clear the input for the next guess
+                        ans_display = ""
+                        if link.ans_len() == len(input_text):
+                            for i in range(link.ans_len()):
+                                if input_text[i] == link.get_ans()[i]:
+                                    ans_display += input_text[i]
+                                else:
+                                    ans_display += "_"
+                        else:
+                            incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
+                            incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+                            windowSurface.blit(incorrect_text, incorrect_rect)
+                            pygame.display.update()
+                            waiting = True
+                            while waiting:
+                                for event in pygame.event.get():
+                                    if event.type == KEYDOWN:
+                                        waiting = False
+                        input_text = ""  # Clear the input for the next guess
 
                 
             else:
                 if len(input_text) < link.ans_len():
                     input_text += event.unicode  # Add the character to the input text
+
+def gameover():
+    global input_text  # Declare input_text as global variable
+    global input_text  # Declare input_text as global
+    global words
+    global ans_display
+
+    windowSurface.fill(BLACK)
+
+    # background of game screen
+    clouds = pygame.image.load('clouds.png')
+    clouds = pygame.transform.scale(clouds, (1800, 1200))
+    clouds_rect = clouds.get_rect(topleft=(-300, -280))
+    windowSurface.blit(clouds, clouds_rect)
+
+    #logo at the top of the game screen
+    logo = pygame.image.load('LINK_logo.png')
+    logo = pygame.transform.scale(logo, (400, 200))
+    logo_rect = logo.get_rect(topleft=(300, 50))
+    windowSurface.blit(logo, logo_rect)
+
+    # Draw rectangle
+    pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
+    pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
+
+    # Display the two words to the player
+    
+    font = pygame.font.SysFont(None, 36)
+    text_surface4 = font.render("gameover.", True, WHITE)
+    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+    windowSurface.blit(text_surface4, text_rect4)
+
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        
 
 
 # Main game loop
@@ -219,6 +288,9 @@ while True:
         # word2 = words[1]
         game()
 
+    elif game_state == "gameover":
+        gameover()
+
     mainClock.tick(40)
 
 
@@ -230,4 +302,6 @@ to do:
 - polish font/colors
 - fix incorrect state for randomized words
 - fix underscore part 
+- reorganize levels
+- hint option
 '''
