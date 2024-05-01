@@ -15,7 +15,7 @@ class Button:
         self.rect = pygame.Rect(position, size)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, GREEN, self.rect)
+        pygame.draw.rect(surface, PURPLE, self.rect)
         font = pygame.font.SysFont(None, 36)
         text_surface = font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -92,6 +92,10 @@ def draw_start_menu():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game_state = "instructions"  # Update game_state here
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
 
 def draw_instructions():
     global game_state
@@ -121,22 +125,35 @@ def draw_instructions():
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
+<<<<<<< HEAD
                 game_state = "game"
 
+=======
+                game()
+                return
+>>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
     
 
 def game():
+
     global input_text  # Declare input_text as global
     global words
     global ans_display
     global game_state
+    global game_state
+    game_state = "game"
+    global input_text
+    input_text = "" 
 
     windowSurface.fill(BLACK)
 
-
     if button.is_clicked(pygame.mouse.get_pos()):
+<<<<<<< HEAD
         print('clicked')
         pass
+=======
+        print("clicked")
+>>>>>>> 29e33f5bc71f0e39d31ec128a6b711e52033f08f
         #this is where what the button will do
 
     # background of game screen
@@ -339,3 +356,12 @@ while True:
 
     mainClock.tick(40)
 
+'''
+to do:
+- instruction screen
+- hard/easy mode
+- randomize first 20 levels
+- polish font/colors
+- fix incorrect state for randomized words
+- fix underscore part 
+'''
