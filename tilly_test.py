@@ -91,7 +91,7 @@ def draw_start_menu():
     for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
-                    game_state = "instructions"  # Update game_state here
+                    game_state = "game"  # Update game_state here
                     
 
 def draw_instructions():
@@ -132,9 +132,6 @@ def game():
     global ans_display
     global game_state
     global game_state
-    game_state = "game"
-    global input_text
-    input_text = "" 
 
     windowSurface.fill(BLACK)
 
@@ -225,9 +222,6 @@ def game():
                         else:
                             hint_string += "_"
                      # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
-                            
-                        
-                    input_text = ""
 
                 # check the entered guess against the link
                 elif link.check_guess(input_text):
@@ -280,7 +274,6 @@ def game():
                                         waiting = False
                         input_text = ""  # Clear the input for the next guess
 
-                
             else:
                 if len(input_text) < link.ans_len():
                     input_text += event.unicode  # Add the character to the input text
@@ -345,10 +338,11 @@ while True:
 
 '''
 to do:
-- instruction screen
+> instruction screen
 - hard/easy mode
 - randomize first 20 levels
 - polish font/colors
 - fix incorrect state for randomized words
 - fix underscore part 
+- make correct letters stay for every guess
 '''
