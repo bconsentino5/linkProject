@@ -15,7 +15,7 @@ class Button:
         self.rect = pygame.Rect(position, size)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, GREEN, self.rect)
+        pygame.draw.rect(surface, PURPLE, self.rect)
         font = pygame.font.SysFont(None, 36)
         text_surface = font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -123,6 +123,7 @@ def draw_instructions():
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
                 start_game()
+                return
 
 
 def start_game():
@@ -139,7 +140,6 @@ def game():
     global game_state
 
     windowSurface.fill(BLACK)
-
 
     if button.is_clicked(pygame.mouse.get_pos()):
         pass
