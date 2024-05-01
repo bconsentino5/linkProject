@@ -92,7 +92,6 @@ def draw_start_menu():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game_state = "instructions"  # Update game_state here
-                    draw_instructions()
 
 def draw_instructions():
     global game_state
@@ -105,7 +104,7 @@ def draw_instructions():
         "Instructions:",
         "you are given two words and you need to guess", 
         "the link between the two",
-        "you are given 5 lives",
+        "you are given 5 lives per level",
         "when you submit an answer you are given which letters",
         "you guessed right"
     ]
@@ -122,14 +121,8 @@ def draw_instructions():
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-                start_game()
+                game_state = "game"
 
-
-def start_game():
-    global game_state
-    game_state = "game"
-    global input_text
-    input_text = ""
     
 
 def game():
@@ -142,6 +135,7 @@ def game():
 
 
     if button.is_clicked(pygame.mouse.get_pos()):
+        print('clicked')
         pass
         #this is where what the button will do
 
