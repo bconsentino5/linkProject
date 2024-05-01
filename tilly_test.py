@@ -70,9 +70,41 @@ def draw_start_menu():
     pygame.display.update()
 
     for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            if event.key == K_SPACE:
-                start_game()
+            if event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    game_state = "instructions"  # Update game_state here
+                    draw_instructions()
+
+def draw_instructions():
+    windowSurface.fill(BLACK)
+    
+    # Draw your instructions here
+    font = pygame.font.SysFont(None, 36)
+    instruction_text = [
+        "Instructions:",
+        "- Guess the correct word by typing it.",
+        "- Use BACKSPACE to delete characters.",
+        "- Press ENTER to submit your guess.",
+        "- If your guess is correct, press any key to continue to the next level.",
+        "- If your guess is incorrect, try again."
+    ]
+    y_offset = 200
+    for line in instruction_text:
+        text_surface = font.render(line, True, WHITE)
+        text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, y_offset))
+        windowSurface.blit(text_surface, text_rect)
+        y_offset += 50
+
+
+    pygame.display.update()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        waiting = False
+                        start_game()
 
 def start_game():
     global game_state
@@ -280,6 +312,10 @@ while True:
 
     if game_state == "start_menu":  # if game is in the start menu
         draw_start_menu()
+    elif game_state == "instructions":
+        for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    start_game()
         # words = link.get_words()
 
     elif game_state == "game":  # if game is in the game
@@ -288,11 +324,7 @@ while True:
         # word2 = words[1]
         game()
 
-    elif game_state == "gameover":
-        gameover()
-
     mainClock.tick(40)
-
 
 '''
 to do:
