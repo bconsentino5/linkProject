@@ -6,7 +6,7 @@ word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
 response = requests.get(word_site)
 WORDS = response.content.split()
 
-max_levels = 2
+max_levels = 20
 levels = {'1': ['mom', 'dad', 'parents'], 
           '2': ['bird', 'plane', 'fly'],
           '3': ['heel', 'bark', 'dog'],
@@ -28,11 +28,13 @@ levels = {'1': ['mom', 'dad', 'parents'],
           '19': ['heart', 'music', 'beat'],
           '20': ['dairy', 'nut', 'butter']}
 
+
 class Link():
     def __init__(self):
         self.curr_level = 1
         self.lives = 5
         self.ans = ""
+        self.called_levels = []
 
     def ans_len(self):
         return int(len(self.ans))
@@ -47,7 +49,7 @@ class Link():
         return self.lives
     
     def set_lives(self, num):
-        self.lives -= num
+        self.lives = num
 
     def get_words(self):
         temp = 0
@@ -85,15 +87,24 @@ class Link():
             
             print(f"Found levels: {str(syn1)}, {str(syn2)}, {str(curr_word)}")
 
-            # words = levels.get(str(self.curr_level))
             word1 = str(syn1) # words[0]
             word2 = str(syn2) # words[1]
             self.ans = str(curr_word) # words[2]
         else:
-            words = levels.get(str(self.curr_level))
+            lev = 0
+            isin = False
+            while isin == False:
+                lev = random.randrange(1, 21)
+                if lev in self.called_levels:
+                    isin = False
+                else:
+                    isin = True
+                    self.called_levels.append(lev)
+            words = levels.get(str(lev))
             word1 = words[0]
             word2 = words[1]
             self.ans = words[2]
+            print(self.called_levels)
         
         return word1, word2
 
@@ -103,3 +114,31 @@ class Link():
             return True
         else:
             return False
+        
+    def get_hint(self, ans_display):
+        hint_string = ""
+        hint_i = 0
+        if len(ans_display) < self.ans_len():
+            for i in range(self.ans_len()):
+                ans_display += "_"
+        for i in range(len(ans_display)):
+            if ans_display[i] == "_":
+                hint_i = i
+        for i in range(self.ans_len()):
+            if i == hint_i:
+                hint_string += self.ans[i]
+            else:
+                hint_string += ans_display[i]
+        ans_display = hint_string
+        return ans_display
+        # for i in range(self.ans_len()):
+        #     if i == hint_i:
+        #         if (hint_string[i] == "_"):
+        #             hint_string += self.ans[i]
+        #         else:
+        #             hint_i = random.randrange(0, self.ans_len())
+        #             i -= 1
+        #     else:
+        #         hint_string += "_"
+            # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
+
