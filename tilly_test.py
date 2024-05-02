@@ -7,6 +7,8 @@ from nltk.corpus import wordnet
 import random
 import requests
 
+mode = "easy"
+
 class Button:
     def __init__(self, text, position, size):
         self.text = text
@@ -15,7 +17,10 @@ class Button:
         self.rect = pygame.Rect(position, size)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, PURPLE, self.rect)
+        if mode == "easy":
+            pygame.draw.rect(surface, GREEN, self.rect)
+        else:
+            pygame.draw.rect(surface, RED, self.rect)
         font = pygame.font.SysFont(None, 36)
         text_surface = font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -37,7 +42,7 @@ pygame.display.set_caption("Link")
 # colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
+GREEN = (110, 230, 50)
 BLUE = (0, 0, 255)
 PINK = (206, 7, 232)
 PURPLE = (151, 7, 250)
@@ -138,6 +143,7 @@ def game():
     global incorrect
     global wrong_num
     global correct
+    global mode
 
     windowSurface.fill(BLACK)
 
@@ -242,8 +248,12 @@ def game():
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
-            if (x >= 800 and x <= 950)
-            print(f'Mouse clicked at {x}, {y}')
+            if (x >= 800 and x <= 950) and (y >= 50 and y <= 100):
+                if mode == "easy":  
+                    mode = "hard"
+                else:
+                    mode = "easy"
+                print(f'game mode: {mode}')
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
