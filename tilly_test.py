@@ -7,6 +7,8 @@ from nltk.corpus import wordnet
 import random
 import requests
 
+mode = "easy"
+
 class Button:
     def __init__(self, text, position, size):
         self.text = text
@@ -15,7 +17,10 @@ class Button:
         self.rect = pygame.Rect(position, size)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, PURPLE, self.rect)
+        if mode == "easy":
+            pygame.draw.rect(surface, GREEN, self.rect)
+        else:
+            pygame.draw.rect(surface, RED, self.rect)
         font = pygame.font.SysFont(None, 36)
         text_surface = font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -37,7 +42,7 @@ pygame.display.set_caption("Link")
 # colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
+GREEN = (110, 230, 50)
 BLUE = (0, 0, 255)
 PINK = (206, 7, 232)
 PURPLE = (151, 7, 250)
@@ -51,9 +56,12 @@ game_state = 'start_menu'
 # Initialize input_text
 input_text = ""
 
+# Initialize that the input is empty
+incorrect = False
+wrong_num = False
+correct = False
+
 # Words for the game
-word1 = "mom"
-word2 = "dad"
 ans_display = ""
 
 link = Link()
@@ -110,19 +118,19 @@ def draw_instructions():
         "you guessed right"
     ]
     y_offset = 200
-    for line in instruction_text:
-        text_surface = font.render(line, True, WHITE)
-        text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, y_offset))
-        windowSurface.blit(text_surface, text_rect)
-        y_offset += 50
+    # for line in instruction_text:
+    #     text_surface = font.render(line, True, WHITE)
+    #     text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, y_offset))
+    #     windowSurface.blit(text_surface, text_rect)
+    #     y_offset += 50
 
 
     pygame.display.update()
 
     for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            if event.key == K_SPACE:
-                game_state = "game"
+            if event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    game_state = "game"  # Update game_state here
     
 
 def game():
@@ -132,11 +140,17 @@ def game():
     global ans_display
     global game_state
     global game_state
+    global incorrect
+    global wrong_num
+    global correct
+    global mode
 
     windowSurface.fill(BLACK)
 
-    if button.is_clicked(pygame.mouse.get_pos()):
-        print('clicked')
+    
+
+    # if button.is_clicked(pygame.mouse.get_pos()):
+    #     print('clicked')
 
         #this is where what the button will do
 
@@ -181,6 +195,12 @@ def game():
     text_rect3 = text_surface3.get_rect(topleft=(200, 400))
     windowSurface.blit(text_surface3, text_rect3)
 
+
+        # text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + link.get_ans(), True, WHITE)
+        # text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+        # windowSurface.blit(text_surface4, text_rect4)
+
+        
     
     text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
     text_rect4 = text_surface4.get_rect(topleft=(200, 450))
@@ -190,93 +210,111 @@ def game():
     text_rect5 = text_surface5.get_rect(topleft=(240, 500))
     windowSurface.blit(text_surface5, text_rect5)
 
+    if correct == True:
+        clouds = pygame.image.load('clouds.png')
+        clouds = pygame.transform.scale(clouds, (1800, 1200))
+        clouds_rect = clouds.get_rect(topleft=(-300, -280))
+        windowSurface.blit(clouds, clouds_rect)
+
+        #logo at the top of the game screen
+        logo = pygame.image.load('LINK_logo.png')
+        logo = pygame.transform.scale(logo, (400, 200))
+        logo_rect = logo.get_rect(topleft=(300, 50))
+        windowSurface.blit(logo, logo_rect)
+
+    # Draw rectangle
+        pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
+        pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
+        
+        correct_text = font.render("Correct! press any key to continue", True, GREEN)
+        correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 50))
+        windowSurface.blit(correct_text, correct_rect)
+
+    if incorrect == True:
+        incorrect_text = font.render("Incorrect. Try again.", True, RED)
+        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 50))
+        windowSurface.blit(incorrect_text, incorrect_rect)
+    
+    if wrong_num == True:
+        incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
+        incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 50))
+        windowSurface.blit(incorrect_text, incorrect_rect)
+
     button.draw(windowSurface)
 
     pygame.display.update()
 
     # Handle typing
     for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if (x >= 800 and x <= 950) and (y >= 50 and y <= 100):
+                if mode == "easy":  
+                    mode = "hard"
+                else:
+                    mode = "easy"
+                print(f'game mode: {mode}')
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == KEYDOWN:
+            incorrect = False
+            wrong_num = False
             if event.key == K_BACKSPACE:
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
                 # check if they want a hint
                 if input_text == '1':
-                    link.set_lives(1)
-                    ans_display = ""
-                    hint_string = ""
-                    hint_i = random.randrange(0, link.ans_len())
-                    for i in range(link.ans_len()):
-                        hint_string += "_"
-                        print(hint_string)
-                    for i in range(link.ans_len()):
-                        if i == hint_i:
-                            if (hint_string[i] == "_"):
-                                hint_string += link.ans[i]
-                            else:
-                                hint_i = random.randrange(0, link.ans_len())
-                                i -= 1
-                        else:
-                            hint_string += "_"
-                     # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
+                    input_text = ""
+                    link.set_lives(link.get_lives() - 1)
+                    ans_display = link.get_hint(ans_display)
+                    if link.check_guess(ans_display):
+                        input_text = ans_display
 
                 # check the entered guess against the link
                 elif link.check_guess(input_text):
                     print('correct')
-                    # Display "Correct" on the screen
-                    ans_display = ""
-                    for i in range(link.ans_len()):
-                            ans_display += input_text[i]
-                    # text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
-                    # text_rect4 = text_surface4.get_rect(topleft=(200, 450))
-                    # windowSurface.blit(text_surface4, text_rect4)
-
-                    correct_text = font.render("Correct! press any key to continue", True, GREEN)
-                    correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-                    windowSurface.blit(correct_text, correct_rect)
-                    pygame.display.update()
-
-                    # Wait for space bar to continue
-                    waiting = True
-                    while waiting:
-                        ans_display = link.get_ans()
-                        for event in pygame.event.get():
-                            if event.type == KEYDOWN:
-                                waiting = False
-                                ans_display = ""
+                    correct = True
                     input_text = ""  
+                    link.set_lives(5)
                     words = link.get_words()
+                    ans_display = ""
+
                 else:
                     print('incorrect')
-                    link.set_lives(1)
                     if link.get_lives() == 0:
                         game_state = "gameover"
                     else:
-                        ans_display = ""
                         if link.ans_len() == len(input_text):
-                            for i in range(link.ans_len()):
-                                if input_text[i] == link.get_ans()[i]:
-                                    ans_display += input_text[i]
-                                else:
-                                    ans_display += "_"
+                            link.set_lives((link.get_lives())-1)
+                            incorrect = True
+                            if len(ans_display) == link.ans_len():
+                                for i in range(link.ans_len()):
+                                    ans_display = list(ans_display)
+                                    if input_text[i] == link.get_ans()[i]:
+                                        ans_display[i] = link.get_ans()[i]
+                                    else:
+                                        ans_display[i] = '_'
+                                ans_display = "".join(ans_display)
+                                print(ans_display)
+                            else:           
+                                for i in range(link.ans_len()):
+                                    if input_text[i] == link.get_ans()[i]:
+                                        ans_display += input_text[i]
+                                    else:
+                                        ans_display += "_"
                         else:
-                            incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
-                            incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-                            windowSurface.blit(incorrect_text, incorrect_rect)
-                            pygame.display.update()
-                            waiting = True
-                            while waiting:
-                                for event in pygame.event.get():
-                                    if event.type == KEYDOWN:
-                                        waiting = False
+                            wrong_num = True
+                    
                         input_text = ""  # Clear the input for the next guess
+                        
 
             else:
                 if len(input_text) < link.ans_len():
                     input_text += event.unicode  # Add the character to the input text
+                if correct == True:
+                    input_text = input_text[:-1]
+                    correct = False
 
 def gameover():
     global input_text  # Declare input_text as global variable
@@ -306,7 +344,7 @@ def gameover():
     
     font = pygame.font.SysFont(None, 36)
     text_surface4 = font.render("gameover.", True, WHITE)
-    text_rect4 = text_surface4.get_rect(topleft=(200, 450))
+    text_rect4 = text_surface4.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
     windowSurface.blit(text_surface4, text_rect4)
 
     pygame.display.update()
@@ -340,9 +378,12 @@ while True:
 to do:
 > instruction screen
 - hard/easy mode
-- randomize first 20 levels
+> randomize first 20 levels
 - polish font/colors
-- fix incorrect state for randomized words
-- fix underscore part 
-- make correct letters stay for every guess
+> fix incorrect state for randomized words
+> fix underscore part 
+> make correct letters stay for every guess
+> fix hint feature
+- add a start over button for the gameover screen
+> make correct answer appear in answer spot
 '''
