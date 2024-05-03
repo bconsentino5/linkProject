@@ -21,7 +21,7 @@ class Button:
             pygame.draw.rect(surface, GREEN, self.rect)
         else:
             pygame.draw.rect(surface, RED, self.rect)
-        font = pygame.font.SysFont(None, 36)
+        font = pygame.font.SysFont("monospace", 25)
         text_surface = font.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
         surface.blit(text_surface, text_rect)
@@ -99,7 +99,7 @@ def draw_start_menu():
     for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
-                    game_state = "game"  # Update game_state here
+                    game_state = "instructions"  # Update game_state here
                     
 
 def draw_instructions():
@@ -172,12 +172,12 @@ def game():
 
     # Display the two words to the player
     
-    font = pygame.font.SysFont(None, 36)
+    font = pygame.font.SysFont("monospace", 25)
     text_surface5 = font.render("Level " + str(link.get_curr_level()), True, WHITE)
     text_rect5 = text_surface5.get_rect(topleft=(700, 252))
     windowSurface.blit(text_surface5, text_rect5)
 
-    font = pygame.font.SysFont(None, 36)
+    # font = pygame.font.SysFont("None", 36)
     text_surface6 = font.render("Lives: " + str(link.get_lives()), True, WHITE)
     text_rect6 = text_surface6.get_rect(topleft=(200, 252))
     windowSurface.blit(text_surface6, text_rect6)
@@ -377,13 +377,14 @@ while True:
 '''
 to do:
 > instruction screen
-- hard/easy mode
+> hard/easy mode
+- clear answer in hard mode
 > randomize first 20 levels
 - polish font/colors
 > fix incorrect state for randomized words
 > fix underscore part 
 > make correct letters stay for every guess
 > fix hint feature
-- add a start over button for the gameover screen
+> add a start over button for the gameover screen
 > make correct answer appear in answer spot
 '''

@@ -104,7 +104,7 @@ class Link():
             word1 = words[0]
             word2 = words[1]
             self.ans = words[2]
-            print(self.called_levels)
+
         
         return word1, word2
 
@@ -124,6 +124,7 @@ class Link():
         for i in range(len(ans_display)):
             if ans_display[i] == "_":
                 hint_i = i
+                break
         for i in range(self.ans_len()):
             if i == hint_i:
                 hint_string += self.ans[i]
