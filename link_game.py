@@ -118,9 +118,9 @@ def draw_instructions():
     instruction_text = [
         "Instructions:",
         "you are given two words and you need to guess", 
-        "the link between the two",
+        "the LINK between the two",
         "you are given 5 lives per level",
-        "when you submit an answer you are given which letters",
+        "when you submit a guess, you are given which letters",
         "you guessed right",
         "",
         "press SPACE to continue"
@@ -151,6 +151,7 @@ def game():
     global wrong_num
     global correct
     global mode
+    global prev_ans
 
     windowSurface.fill(BLACK)
 
@@ -196,11 +197,11 @@ def game():
     windowSurface.blit(text_surface3, text_rect3)
         
     if mode == "easy":
-        text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+        text_surface4 = font.render("LINK (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
         text_rect4 = text_surface4.get_rect(topleft=(200, 550))
         windowSurface.blit(text_surface4, text_rect4)
     else:
-        text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): ", True, WHITE)
+        text_surface4 = font.render("LINK (" + str(len(link.get_ans())) + " letters long): ", True, WHITE)
         text_rect4 = text_surface4.get_rect(topleft=(200, 550))
         windowSurface.blit(text_surface4, text_rect4)
 
@@ -224,7 +225,11 @@ def game():
         pygame.draw.rect(windowSurface, PURPLE, pygame.Rect(120, 250, 750, 700))
         pygame.draw.rect(windowSurface, DARKPURPLE, pygame.Rect(150, 280, 690, 600))
         
-        correct_text = font.render("Correct! press any key to continue", True, GREEN)
+        correct_text = font.render("Correct! LINK was: " + prev_ans, True, GREEN)
+        correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2)))
+        windowSurface.blit(correct_text, correct_rect)
+
+        correct_text = font.render("Press any key to continue.", True, GREEN)
         correct_rect = correct_text.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 50))
         windowSurface.blit(correct_text, correct_rect)
 
@@ -270,17 +275,26 @@ def game():
                 input_text = input_text[:-1]  # Remove last character
             elif event.key == K_RETURN:
                 # check if they want a hint
-                if input_text == '1':
+                if link.get_lives() < 0:
+                    game_state = "gameover"
+                elif (input_text == '1') and (link.get_lives() >= 0):
                     input_text = ""
                     link.set_lives(link.get_lives() - 1)
                     ans_display = link.get_hint(ans_display)
                     if link.check_guess(ans_display):
-                        input_text = ans_display
+                        prev_ans = link.get_ans()
+                        link.set_lives(5)
+                        words = link.get_words()
+                        ans_display = ""
+                        correct = True
+                    elif link.get_lives() < 0:
+                        game_state = "gameover"
 
                 # check the entered guess against the link
                 elif link.check_guess(input_text):
                     print('correct')
                     correct = True
+                    prev_ans = link.get_ans()
                     input_text = ""  
                     link.set_lives(5)
                     words = link.get_words()
@@ -327,13 +341,6 @@ def gameover():
     global words
     global ans_display
     global game_state
-
-    link.set_lives(5)
-    link.set_level(1)
-    link.clear_called_levels()
-    words = link.get_words()
-    input_text = ""
-    ans_display = ""
     
     windowSurface.fill(BLACK)
 
@@ -355,15 +362,20 @@ def gameover():
 
     # Display the two words to the player
     
-    font = pygame.font.SysFont(None, 36)
-    text_surface4 = font.render("gameover.", True, WHITE)
+    font = pygame.font.SysFont("monospace", 25)
+    text_surface4 = font.render("Gameover.", True, WHITE)
     text_rect4 = text_surface4.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
     windowSurface.blit(text_surface4, text_rect4)
 
-    font = pygame.font.SysFont(None, 36)
-    text_surface4 = font.render("press space to start over", True, WHITE)
-    text_rect4 = text_surface4.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2)-50 ))
+    text_surface4 = font.render("LINK was: " + link.get_ans(), True, WHITE)
+    text_rect4 = text_surface4.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 30))
     windowSurface.blit(text_surface4, text_rect4)
+
+    text_surface4 = font.render("Press SPACE to start over", True, WHITE)
+    text_rect4 = text_surface4.get_rect(center=(WINDOW_WIDTH // 2, (WINDOW_HEIGHT // 2) + 80 ))
+    windowSurface.blit(text_surface4, text_rect4)
+
+
 
     pygame.display.update()
 
@@ -373,6 +385,12 @@ def gameover():
                 sys.exit()
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
+                    link.set_lives(5)
+                    link.set_level(1)
+                    link.clear_called_levels()
+                    words = link.get_words()
+                    input_text = ""
+                    ans_display = ""
                     game_state = "instructions"
         
 

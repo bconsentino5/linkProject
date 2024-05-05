@@ -24,6 +24,4 @@ to play the game:
     if you want to get to the randomized part sooner, go to combo.py and on line 9, change max_levels to 2.
     this will make the randomized levels start after level 2
     
-
-
 '''
