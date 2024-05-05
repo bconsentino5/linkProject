@@ -15,12 +15,14 @@ how to download everything for the game:
         - type "pip install --user -U nltk"
         - after that is done installing, type "-m nltk.downloader wordnet"
 
-to start the game:
+to play the game:
 - open combo.py and link_game.py
 - press the play button in VS Code to run the program
-- when you want to quit the game, either press the red "x" on the game screen
+- when you want to quit the game, either x out of the game screen
     or if that doesn't work, press control "c" in the terminal
-- if you want to shorten the amount of hard 
+- there are 20 hard coded levels before the game gets randomized. 
+    if you want to get to the randomized part sooner, go to combo.py and on line 9, change max_levels to 2.
+    this will make the randomized levels start after level 2
     
 
 

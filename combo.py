@@ -6,7 +6,7 @@ word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
 response = requests.get(word_site)
 WORDS = response.content.split()
 
-max_levels = 2
+max_levels = 20
 levels = {'1': ['mom', 'dad', 'parents'], 
           '2': ['bird', 'plane', 'fly'],
           '3': ['heel', 'bark', 'dog'],
@@ -45,11 +45,17 @@ class Link():
     def get_curr_level(self):
         return self.curr_level
     
+    def set_level(self, lev):
+        self.curr_level = lev
+    
     def get_lives(self):
         return self.lives
     
     def set_lives(self, num):
         self.lives = num
+    
+    def clear_called_levels(self):
+        self.called_levels = []
 
     def get_words(self):
         temp = 0
@@ -81,9 +87,6 @@ class Link():
                 syn1 = random.choice(synonyms)
             while (syn2 == "") or (syn2 == curr_word) or (syn2 == syn1):
                 syn2 = random.choice(synonyms)
-
-
-            # levels.update({str(self.curr_level): [str(syn1), str(syn2), str(curr_word)]})
             
             print(f"Found levels: {str(syn1)}, {str(syn2)}, {str(curr_word)}")
 
@@ -132,14 +135,4 @@ class Link():
                 hint_string += ans_display[i]
         ans_display = hint_string
         return ans_display
-        # for i in range(self.ans_len()):
-        #     if i == hint_i:
-        #         if (hint_string[i] == "_"):
-        #             hint_string += self.ans[i]
-        #         else:
-        #             hint_i = random.randrange(0, self.ans_len())
-        #             i -= 1
-        #     else:
-        #         hint_string += "_"
-            # still need to make it print the hints and figure out a way to get the hint word to stay the same for the whole round
-
+  

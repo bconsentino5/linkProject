@@ -113,21 +113,6 @@ def draw_instructions():
     clouds_rect = clouds.get_rect(topleft=(-400, -280))
     windowSurface.blit(clouds, clouds_rect)
 
-    # Load the PNG image
-    # logo = pygame.image.load('LINK_logo.png')
-    # logo = pygame.transform.scale(logo, (1200, 900))  # Size of image
-
-    # play = pygame.image.load('pressSPACE.png')
-    # play = pygame.transform.scale(play, (600, 300))  # Size of image
-
-    # # Location of image
-    # logo_rect = logo.get_rect(topleft=(-10, -150))
-    # play_rect = play.get_rect(topleft=(200, 500))
-
-    # # Shows stuff on screen
-    # windowSurface.blit(logo, logo_rect)
-    # windowSurface.blit(play, play_rect)
-
     # Draw your instructions here
     font = pygame.font.SysFont("monospace", 25)
     instruction_text = [
@@ -153,38 +138,6 @@ def draw_instructions():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game_state = "game"  # Update game_state here
-
-    # global game_state
-
-    # print("Doing instruction page")
-
-    # for event in pygame.event.get():
-    #     if event.type == KEYUP:
-    #         if event.key == K_SPACE:
-    #             print("Changing to game state")
-    #             game_state = "game"  # Update game_state here
-
-    # windowSurface.fill(BLACK)
-    
-    # # Draw your instructions here
-    # font = pygame.font.SysFont(None, 36)
-    # instruction_text = [
-    #     "Instructions:",
-    #     "you are given two words and you need to guess", 
-    #     "the link between the two",
-    #     "you are given 5 lives per level",
-    #     "when you submit an answer you are given which letters",
-    #     "you guessed right"
-    # ]
-    # y_offset = 200
-    # for line in instruction_text:
-    #     text_surface = font.render(line, True, WHITE)
-    #     text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, y_offset))
-    #     windowSurface.blit(text_surface, text_rect)
-    #     y_offset += 50
-
-
-    # pygame.display.update()
     
 
 def game():
@@ -201,12 +154,6 @@ def game():
 
     windowSurface.fill(BLACK)
 
-    
-
-    # if button.is_clicked(pygame.mouse.get_pos()):
-    #     print('clicked')
-
-        #this is where what the button will do
 
     # background of game screen
     clouds = pygame.image.load('clouds.png')
@@ -247,20 +194,18 @@ def game():
     text_surface3 = font.render("Your Guess: " + input_text, True, WHITE)
     text_rect3 = text_surface3.get_rect(topleft=(200, 450))
     windowSurface.blit(text_surface3, text_rect3)
-
-
-        # text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + link.get_ans(), True, WHITE)
-        # text_rect4 = text_surface4.get_rect(topleft=(200, 450))
-        # windowSurface.blit(text_surface4, text_rect4)
-
         
-    
-    text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
-    text_rect4 = text_surface4.get_rect(topleft=(200, 550))
-    windowSurface.blit(text_surface4, text_rect4)
+    if mode == "easy":
+        text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): " + ans_display, True, WHITE)
+        text_rect4 = text_surface4.get_rect(topleft=(200, 550))
+        windowSurface.blit(text_surface4, text_rect4)
+    else:
+        text_surface4 = font.render("Answer (" + str(len(link.get_ans())) + " letters long): ", True, WHITE)
+        text_rect4 = text_surface4.get_rect(topleft=(200, 550))
+        windowSurface.blit(text_surface4, text_rect4)
 
     text_surface5 = font.render("enter '1' to get a hint, lose one life", True, WHITE)
-    text_rect5 = text_surface5.get_rect(topleft=(210, 800))
+    text_rect5 = text_surface5.get_rect(topleft=(210, 700))
     windowSurface.blit(text_surface5, text_rect5)
 
     if correct == True:
@@ -294,16 +239,12 @@ def game():
     ]
 
     if wrong_num == True:
-        y_offset = 650
+        y_offset = 620
         for line in incorrect_number_text:
             text_surface = font.render(line, True, RED)
             text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, y_offset))
             windowSurface.blit(text_surface, text_rect)
             y_offset += 50
-
-        # incorrect_text = font.render("Incorrect number of characters. Press any key to try again.", True, RED)
-        # incorrect_rect = incorrect_text.get_rect(center=(WINDOW_WIDTH // 2, 650))
-        # windowSurface.blit(incorrect_text, incorrect_rect)
 
     button.draw(windowSurface)
 
@@ -384,11 +325,17 @@ def game():
 
 def gameover():
     global input_text  # Declare input_text as global variable
-    global input_text  # Declare input_text as global
     global words
     global ans_display
     global game_state
 
+    link.set_lives(5)
+    link.set_level(1)
+    link.clear_called_levels()
+    words = link.get_words()
+    input_text = ""
+    ans_display = ""
+    
     windowSurface.fill(BLACK)
 
     # background of game screen
