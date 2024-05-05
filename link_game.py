@@ -303,7 +303,6 @@ def game():
                                         else:
                                             ans_display[i] = '_'
                                     ans_display = "".join(ans_display)
-                                    print(ans_display)
                                 else:           
                                     for i in range(link.ans_len()):
                                         if input_text[i] == link.get_ans()[i]:
